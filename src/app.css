@@ -1,0 +1,212 @@
+.app {
+  display: grid;
+  flex-direction: column;
+
+  grid-template-rows: 75px 1fr;
+  overscroll-behavior: contain;
+
+  transition: height 0.3s ease-in-out;
+
+  min-width: calc(1px * var(--baseAppWidth));
+  max-width: calc(1px * var(--baseAppWidth));
+  min-height: calc(1px * var(--baseAppHeight));
+  max-height: calc(1px * var(--baseAppHeight));
+}
+
+.top {
+  background-color: teal;
+  display: flex;
+  position: relative;
+  justify-content: center;
+  align-items: center;
+}
+
+.h_scroller {
+  display: flex;
+  justify-content: flex-start;
+  gap: 10px;
+  overflow: scroll;
+  width: 100%;
+  min-height: calc(100px * (var(--appWidth) / var(--baseAppWidth)));
+  margin-bottom: calc(25px * (var(--appWidth) / var(--baseAppWidth)));
+}
+
+.h_scroller::-webkit-scrollbar,
+.h_scroller::-webkit-scrollbar-button {
+  display: none;
+}
+
+.message {
+  font-size: 1.2em;
+  display: flex;
+  flex-direction: column;
+  align-self: flex-end;
+  padding: 16px 20px;
+  background: rgba(255, 255, 255, 0.06);
+  mix-blend-mode: normal;
+  box-shadow: rgba(255, 255, 255, 0.12) 0px 0px 0px 1px inset;
+  border-radius: 20px 20px 4px;
+  margin-bottom: 24px;
+  margin-right: 16px;
+}
+
+.rect {
+  flex: 1;
+  flex-shrink: 0;
+  flex-grow: 0;
+  min-width: calc(100px * (var(--appWidth) / var(--baseAppWidth)));
+  min-height: calc(100px * (var(--appWidth) / var(--baseAppWidth)));
+  background-color: red;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-size: 2rem;
+  font-weight: bold;
+}
+
+.field {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  font-size: 16px;
+  opacity: 0;
+  pointer-events: none;
+
+  background-color: transparent;
+  border: none;
+}
+
+.fakeInput {
+  border-bottom: 2px solid white;
+  height: 50px;
+  width: 80vw;
+  font-size: var(--fontSize);
+  display: flex;
+  align-items: center;
+  flex-direction: row;
+}
+
+.fakeInput::after {
+  content: "";
+  display: inline-block;
+  height: 25px;
+  min-width: 2px;
+  background-color: white;
+  margin-left: 3px;
+  opacity: 0;
+}
+
+.field:focus + .fakeInput::after {
+  animation-name: blink;
+  animation-duration: 1000ms;
+  animation-iteration-count: infinite;
+  opacity: 1;
+}
+
+.bottom {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  height: 50px;
+}
+
+@keyframes blink {
+  from {
+    opacity: 1;
+  }
+  to {
+    opacity: 0;
+  }
+}
+
+.mobileContainer {
+  position: relative;
+  width: calc(1px * var(--baseAppWidth));
+  height: calc(1px * var(--baseAppHeight));
+  overflow: hidden;
+}
+
+.isBrowser .mobileContainer {
+  outline: 2px solid rgba(255, 255, 255, 0.2);
+  border-radius: 10px;
+}
+
+.isMobile .mobileContainer {
+  width: 100dvw;
+  height: 100dvh;
+}
+
+.mobileContainer_wrapper {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  position: absolute;
+  inset: 0;
+  background-color: #000;
+}
+
+.mobileContainer_contentWrapper {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: calc(1px * var(--baseAppWidth));
+  height: calc(1px * var(--baseAppHeight));
+  box-sizing: border-box;
+
+  transition: height 0.3s ease-out;
+}
+
+.isBrowser .mobileContainer_contentWrapper {
+  padding-top: calc(1px * var(--statusBarHeight));
+}
+
+.mobileContainer_keyboard {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: calc(1px * var(--baseAppWidth));
+  z-index: 1;
+
+  transform: translateY(100%);
+
+  transition: transform 0.3s ease-out;
+}
+
+.mobileContainer_keyboard > img {
+  width: 100%;
+  height: 100%;
+}
+
+.mobileContainer_statusBar {
+  width: calc(1px * var(--baseAppWidth));
+}
+
+.isMobile .mobileContainer_statusBar {
+  display: none;
+}
+
+.mobileContainer_statusBar > img {
+  width: 100%;
+  height: 100%;
+}
+
+.chatContainer {
+  width: 100%;
+  height: calc(100% - 50px);
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  align-items: center;
+  overflow-y: auto;
+  flex: 1;
+  background-color: #333;
+  overscroll-behavior: contain;
+  overflow: auto;
+}
