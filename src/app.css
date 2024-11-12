@@ -137,4 +137,10 @@
   background-color: #333;
   overscroll-behavior: contain;
   overflow: auto;
+  outline: 1px solid red;
+}
+
+.isBrowser .chatContainer::-webkit-scrollbar,
+.chatContainer::-webkit-scrollbar-button {
+  display: none;
 }

@@ -1,5 +1,6 @@
 import { useEffect, useRef, useState } from "react";
 import MobileContainer from "./components/mobile-container";
+import { motion, AnimatePresence } from "framer-motion";
 
 import "./app.css";
 
@@ -17,13 +18,24 @@ function ChatContainer({ children }) {
       }
     }
 
+    const resizeObserver = new ResizeObserver((entries) => {
+      for (let entry of entries) {
+        if (entry.contentBoxSize) {
+          chatRef.current.scrollTop = chatRef.current.scrollHeight;
+        }
+      }
+    });
+
     const observer = new MutationObserver(observerCallback);
     observer.observe(chatRef.current, {
       childList: true,
     });
 
+    resizeObserver.observe(chatRef.current);
+
     return () => {
       observer.disconnect();
+      resizeObserver.disconnect();
     };
   }, []);
 
@@ -43,20 +55,34 @@ function App() {
   return (
     <MobileContainer>
       <ChatContainer>
-        {messages.map((message, index) => (
-          <>
-            <div key={index} className="message">
+        <AnimatePresence mode="popLayout">
+          {messages.map((message, index) => (
+            <motion.div
+              layout
+              key={index}
+              className="message"
+              initial={{
+                scale: 1.2,
+                opacity: 0,
+                backgroundColor: "rgba(173,216,230,1)",
+              }}
+              animate={{
+                scale: 1,
+                opacity: 1,
+                backgroundColor: "rgba(255, 255, 255, 0.06)",
+                transition: {
+                  backgroundColor: {
+                    delay: 0.5,
+                  },
+                },
+              }}
+              exit={{ scale: 0.8, opacity: 0 }}
+              transition={{ type: "spring" }}
+            >
               {message}
-            </div>
-            <div className="h_scroller">
-              <div className="rect">2a</div>
-              <div className="rect">2b</div>
-              <div className="rect">2c</div>
-              <div className="rect">2d</div>
-              <div className="rect">2e</div>
-            </div>
-          </>
-        ))}
+            </motion.div>
+          ))}
+        </AnimatePresence>
       </ChatContainer>
 
       <div className="bottom">
@@ -76,6 +102,7 @@ function App() {
             }
           }}
         />
+
         <div
           ref={fakeInputRef}
           className="fakeInput"
